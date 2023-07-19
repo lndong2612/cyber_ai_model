@@ -127,3 +127,10 @@ wrapt==1.15.0
 WTForms==3.0.1
 yarl==1.9.2
 zipp==3.15.0
+tensorflow-gpu==2.2.0
+easydict==1.10
+protobuf==3.19.*
+numpy==1.19.5
+editdistance
+Pillow
+scikit-learn==0.22.1
