@@ -1,0 +1,132 @@
+swagger: "2.0"
+info:
+  version: "1.0"
+  title: API Model
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: X-Access-Token
+paths:
+  /model/action/{id_model}:
+    put:
+      summary: Dừng hoặc khởi động lại mô hình AI
+      tags:
+        - Model Management
+      parameters:
+        - name: id_model
+          in: path
+          type: string
+          required: true
+        - in: body
+          name: body
+          description: active - khởi động mô hình , inactive - dừng triển khai, stop - dừng mô hình
+          required: true
+          schema:
+            type: object
+            properties:
+              action:
+                type: string
+                enum:
+                  - active
+                  - inactive
+                  - stop
+      security:
+        - ApiKeyAuth: []
+      responses:
+        200:
+          description: "ok"
+
+  /model/train/{id_model}:
+    get:
+      summary: Huấn luyện mô hình AI
+      tags:
+        - Model Management
+      parameters:
+        - name: id_model
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Huấn luyện mô hình thành công
+        400:
+          description: Huấn luyện mô hình thất bại
+      security:
+        - ApiKeyAuth: []
+
+  /model/deploy/{id_model}:
+    get:
+      summary: Triển khai mô hình AI
+      tags:
+        - Deploy
+      parameters:
+        - name: id_model
+          in: path
+          type: string
+      definitions:
+        Model:
+          type: object
+          properties:
+            success:
+              type: string
+      responses:
+        200:
+          description: Triển khai mô hình AI
+      security:
+        - ApiKeyAuth: []
+
+  /model/predict/{id_model}:
+    post:
+      summary: Lấy kết quả dự đoán mô hình AI
+      tags:
+        - Deploy
+      parameters:
+        - name: file
+          in: formData
+          type: file
+          required: true
+        - name: id_model
+          in: path
+          type: string
+      definitions:
+        Model:
+          type: object
+          properties:
+            success:
+              type: string
+      responses:
+        200:
+          description: Kêt quả dự đoán
+
+  /model/test/{id_model}:
+    post:
+      summary: Test kết quả dự đoán mô hình AI
+      tags:
+        - TEST
+      parameters:
+        - name: file
+          in: formData
+          type: file
+          required: true
+        - name: id_model
+          in: path
+          type: string
+      definitions:
+        Model:
+          type: object
+          properties:
+            success:
+              type: string
+      responses:
+        200:
+          description: Kêt quả dự đoán
+
+  /model/resources/test.png:
+    get:
+      summary: Ảnh kết quả dự đoán
+      tags:
+        - TEST
+      responses:
+        200:
+          description: Kêt quả dự đoán

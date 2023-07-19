@@ -1,0 +1,45 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cybersecurityai-ingress
+  namespace: cybersecuritybca
+  annotations:
+    # sticky session: https://kubernetes.github.io/ingress-nginx/examples/affinity/cookie/
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/affinity-mode: "balanced" 
+    #nginx.ingress.kubernetes.io/affinity-mode: "persistent" 
+    nginx.ingress.kubernetes.io/affinity-canary-behavior: "sticky"
+    #nginx.ingress.kubernetes.io/affinity-canary-behavior: "legacy"
+    nginx.ingress.kubernetes.io/session-cookie-name: "cybersecurity-sticky-cookie"
+    #nginx.ingress.kubernetes.io/session-cookie-secure: "true"
+    #nginx.ingress.kubernetes.io/session-cookie-secure: "false"
+    nginx.ingress.kubernetes.io/session-cookie-expires: "172800"
+    nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "45"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "45"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "256k"
+
+    ## backend ssl
+    ## if you want to reach the backend via TLS
+    #nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    ## if you want to reach the backend via TLS with TLS decryption in the backend:
+    #nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+spec:
+  #tls:
+  #- hosts:
+  #  - mpscybersecurity.thinklabs.com.vn
+  #  secretName: tls-thinklabs.com.vn
+  ingressClassName: nginx
+  rules:
+  - host: mpscybersecurity.thinklabs.com.vn
+    http:
+      paths:
+      - path: /model
+        pathType: Prefix
+        backend:
+          service:
+            name: cybersecurityai
+            port:
+              number: 4002

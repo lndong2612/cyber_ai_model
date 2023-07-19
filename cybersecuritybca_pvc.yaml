@@ -1,0 +1,13 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: storage-claim
+  namespace: cybersecuritybca
+spec:
+  accessModes:
+  #- ReadWriteOnce
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 200Gi
+  storageClassName: local-ssd-storage
